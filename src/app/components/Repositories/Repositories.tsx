@@ -18,7 +18,7 @@ type User = {
 };
 
 export default function Repositories() {
-  const GITHUB_USERNAME = 'cirosantilli';
+  const GITHUB_USERNAME = 'clintonikechukwu';
   const REPO_LIMIT = 5;
 
   const [repos, setRepos] = useState<Repo[]>([]);
