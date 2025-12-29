@@ -11,28 +11,41 @@ type Repo = {
   forks_count: number;
 };
 
+type User = {
+  login: string;
+  avatar_url: string;
+  html_url: string;
+};
+
 export default function Repositories() {
-  const GITHUB_USERNAME = 'vercel'; // ✅ Public sample account
+  const GITHUB_USERNAME = 'vercel';
   const REPO_LIMIT = 5;
 
   const [repos, setRepos] = useState<Repo[]>([]);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(
-      `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=${REPO_LIMIT}`
-    )
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch repositories');
-        return res.json();
-      })
-      .then((data: Repo[]) => {
-        setRepos(data.slice(0, REPO_LIMIT));
+    Promise.all([
+      fetch(`https://api.github.com/users/${GITHUB_USERNAME}`),
+      fetch(
+        `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=${REPO_LIMIT}`
+      ),
+    ])
+      .then(async ([userRes, repoRes]) => {
+        if (!userRes.ok || !repoRes.ok)
+          throw new Error('Failed to fetch GitHub data');
+
+        const userData: User = await userRes.json();
+        const repoData: Repo[] = await repoRes.json();
+
+        setUser(userData);
+        setRepos(repoData.slice(0, REPO_LIMIT));
         setLoading(false);
       })
       .catch(() => {
-        setError('Unable to load repositories');
+        setError('Unable to load GitHub data');
         setLoading(false);
       });
   }, []);
@@ -40,16 +53,31 @@ export default function Repositories() {
   return (
     <section className='bg-gray-50 py-20 px-6 lg:px-8'>
       <div className='mx-auto max-w-[1100px]'>
-        <h2 className='text-3xl lg:text-4xl font-bold text-gray-900 mb-12'>
-          GitHub Repositories
-        </h2>
+        {/* Header */}
+        {user && (
+          <div className='flex items-center gap-4 mb-12'>
+            <img
+              src={user.avatar_url}
+              alt={user.login}
+              className='w-16 h-16 rounded-full border border-gray-200'
+            />
 
-        {/* Loading */}
+            <a
+              href={user.html_url}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-xl font-semibold text-gray-900 hover:underline'
+            >
+              {user.login}
+            </a>
+          </div>
+        )}
+
+        {/* States */}
         {loading && (
           <p className='text-gray-600 text-sm'>Loading repositories…</p>
         )}
 
-        {/* Error */}
         {error && <p className='text-red-500 text-sm'>{error}</p>}
 
         {/* Repo Cards */}
