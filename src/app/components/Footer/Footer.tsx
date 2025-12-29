@@ -1,4 +1,4 @@
-import { FaLinkedin, FaTwitter, FaEnvelope } from 'react-icons/fa';
+import { FaLinkedin, FaTwitter, FaEnvelope, FaGithub } from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -27,6 +27,15 @@ const Footer = () => {
             aria-label='LinkedIn'
           >
             <FaLinkedin />
+          </a>
+          <a
+            href='https://github.com/Bigdaddy-Clinton'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='hover:text-indigo-400 text-2xl'
+            aria-label='LinkedIn'
+          >
+            <FaGithub />
           </a>
           <a
             href='https://twitter.com/' // replace with your Twitter handle
