@@ -1,0 +1,60 @@
+ "build": "next build --turbopack",
+
+postcss.config.js
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+
+tailwind.config.js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './app/**/*.{js,ts,jsx,tsx}',
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+    './src/**/*.{js,ts,jsx,tsx}',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+
+next.config.ts
+const nextConfig = {
+  output: 'export',
+  images: { unoptimized: true },
+};
+
+export default nextConfig;
+
+layout.tsx
+import type { Metadata } from 'next';
+import './globals.css';
+import Navbar from './components/Navbar/Navbar';
+import Footer from './components/Footer/Footer';
+
+
+export const metadata: Metadata = {
+  title: 'CLinton Ikechukwu',
+  description: 'Clinton Ikechukwu | Portfolio',
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang='en'>
+      <body>
+        <Navbar />
+        {children}
+        <Footer />
+      </body>
+    </html>
+  );
+}
