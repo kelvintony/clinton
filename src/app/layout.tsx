@@ -5,7 +5,7 @@ import Footer from './components/Footer/Footer';
 
 export const metadata: Metadata = {
   title: 'CLinton Ikechukwu',
-  description: 'Clinton Ikechukwu | Portfolio -',
+  description: 'Clinton Ikechukwu | Portfolio - v2',
 };
 
 export default function RootLayout({
